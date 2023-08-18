@@ -20,6 +20,13 @@
     "group chat",
     "react"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/talkjs/talkjs-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/talkjs/talkjs-react/issues"
+  },
   "homepage": "https://talkjs.com",
   "version": "0.1.0",
   "type": "module",
