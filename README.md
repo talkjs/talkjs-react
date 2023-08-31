@@ -2,24 +2,26 @@
 
 This library makes it easy to use the [TalkJS](https://talkjs.com) pre-built chat UIs inside a React web application.
 
-`talkjs-react` encapsulates `talkjs`, the framework-independent ("vanilla") [TalkJS JavaScript SDK](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK). It only provides React components for UI-related matters: For anything related to data manipulation, such as synchronizing user data, or creating and joining conversations, use the vanilla SDK.
+`@talkjs/react` encapsulates `talkjs`, the framework-independent ("vanilla") [TalkJS JavaScript SDK](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK). It only provides React components for UI-related matters: For anything related to data manipulation, such as synchronizing user data, or creating and joining conversations, use the vanilla SDK.
 
 TypeScript bindings are included.
 
 ## Experimental note
 This library is hot off the press. It provides a substantially faster way to get TalkJS going with React, but it may still have a few childhood quirks.
 
-If you encounter any problems with `talkjs-react`, please open an issue. If you have a problem with TalkJS itself, or if you're not sure where the problem lies, it's better to open a chat with our support on https://talkjs.com/ (just open the chat widget). TalkJS support is staffed by engineers.
+If you encounter any problems with `@talkjs/react`, please open an issue. If you have a problem with TalkJS itself, or if you're not sure where the problem lies, it's better to open a chat with our support on https://talkjs.com/ (just open the chat widget). TalkJS support is staffed by engineers.
 
 ## Getting Started
 
-Install both `talkjs-react` and the vanilla [TalkJS NPM package](https://www.npmjs.com/package/talkjs):
+Install both `@talkjs/react` and the vanilla [TalkJS NPM package](https://www.npmjs.com/package/talkjs):
 
 ```sh
-yarn add talkjs talkjs-react
+npm install talkjs @talkjs/react
+# or
+yarn add talkjs @talkjs/react
 ```
 
-`talkjs-react` is just a thin wrapper around `talkjs`. Notably, it is designed such that when you update to a new version of `talkjs` that exposes new options, methods or events, you can use these right away from the React components, without having to update `talkjs-react` (or wait for such an update to be published)
+`@talkjs/react` is just a thin wrapper around `talkjs`. Notably, it is designed such that when you update to a new version of `talkjs` that exposes new options, methods or events, you can use these right away from the React components, without having to update `@talkjs/react` (or wait for such an update to be published)
 
 ## Load a UI for existing chat data
 
@@ -28,7 +30,7 @@ yarn add talkjs talkjs-react
 Wrap your main app components in a session:
 
 ```tsx
-import { Session } from "talkjs-react";
+import { Session } from "@talkjs/react";
 
 //...
 
@@ -46,7 +48,7 @@ The session encapsulates a connection to the TalkJS realtime infrastructure, and
 Anywhere inside the children of `<Session>` you can create a `<Chatbox>`, an `<Inbox>` or a `<Popup>`:
 
 ```tsx
-import { Chatbox } from "talkjs-react";
+import { Chatbox } from "@talkjs/react";
 
 //...
 
@@ -73,7 +75,7 @@ To create or update user data, just replace the `userId` prop by `syncUser`. Thi
 
 ```tsx
 import { useCallback } from "react";
-import { Session } from "talkjs-react";
+import { Session } from "@talkjs/react";
 import Talk from "talkjs";
 
 //...
@@ -98,7 +100,7 @@ const syncUser = useCallback(
 </Session>;
 ```
 
-Note: you can't create `Talk.User` object before the TalkJS SDK has initialized. In vanilla JS you'd have to await `Talk.ready` promise for this, but `talkjs-react` ensures that you `syncUser` callback is only called after TalkJS is ready.
+Note: you can't create `Talk.User` object before the TalkJS SDK has initialized. In vanilla JS you'd have to await `Talk.ready` promise for this, but `@talkjs/react` ensures that your `syncUser` callback is only called after TalkJS is ready.
 
 ### 2. Create and join a conversation
 
@@ -108,7 +110,7 @@ Just replace the `conversation` prop by a `syncConversation` callback, which wil
 
 ```tsx
 import { useCallback } from "react";
-import { Chatbox } from "talkjs-react";
+import { Chatbox } from "@talkjs/react";
 import Talk from "talkjs";
 
 //...
@@ -194,7 +196,7 @@ If you need to do things with your
 In any child component of `<Session>` you can call the `useSession` hook to get the `Talk.Session` object:
 
 ```tsx
-import { useSession } from "talkjs-react";
+import { useSession } from "@talkjs/react";
 
 function MyComponent(props) {
   const session = useSession(); // Talk.Session | undefined
@@ -213,7 +215,7 @@ since been destroyed. See the section on liveness below.
 ### Using refs
 
 
-All `talkjs-react` components let you assign the underlying TalkJS object to a
+All `@talkjs/react` components let you assign the underlying TalkJS object to a
 ref:
 
 ```tsx
@@ -293,12 +295,12 @@ Should you want to contribute, please take note of the design notes below.
 
 ## Design notes
 
-This library has been designed to be maximally forward-compatible with future TalkJS features. The `talkjs` package is a peer dependency, not a direct dependency, which means you can control which TalkJS version you want to be on. It also means you won't need to wait for a new version of `talkjs-react` to be published before you can get access to new TalkJS features. 
+This library has been designed to be maximally forward-compatible with future TalkJS features. The `talkjs` package is a peer dependency, not a direct dependency, which means you can control which TalkJS version you want to be on. It also means you won't need to wait for a new version of `@talkjs/react` to be published before you can get access to new TalkJS features. 
 
-From our (TalkJS) perspective, it means we have a lower maintenance burden: we can ship new JS features without having to update (and test and verify) `talkjs-react`.
+From our (TalkJS) perspective, it means we have a lower maintenance burden: we can ship new JS features without having to update (and test and verify) `@talkjs/react`.
 
 This works because vanilla TalkJS is fully backward compatible and has a very consistent design: all UI components are instantiated and mutated in the same way. The React components simply treats any prop that looks like an event (name starts with "on") like an event. Also, barring some props unique to the react components (such as `syncConversation`, `style` and `loadingComponent`), all remaining props are simply assumed to be valid options to pass to `createChatbox` and its sister methods.
 
-This way, if TalkJS eg adds support for a new event or a new option, this will Just Work without updating `talkjs-react`. Modern TypeScript features (notably, [template literal types](https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html)) let us do this in a fully type-safe manner: If you upgrade `talkjs`, then your invocations to `talkjs-react` components will allow new props.
+This way, if TalkJS eg adds support for a new event or a new option, this will Just Work without updating `@talkjs/react`. Modern TypeScript features (notably, [template literal types](https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html)) let us do this in a fully type-safe manner: If you upgrade `talkjs`, then your invocations to `@talkjs/react` components will allow new props.
 
 Any future changes should follow this same design: they should be maximally forward compatible.
