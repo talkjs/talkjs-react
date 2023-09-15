@@ -6,9 +6,6 @@ This library makes it easy to use the [TalkJS](https://talkjs.com) pre-built cha
 
 TypeScript bindings are included.
 
-## Experimental note
-This library is hot off the press. It provides a substantially faster way to get TalkJS going with React, but it may still have a few childhood quirks.
-
 If you encounter any problems with `@talkjs/react`, please open an issue. If you have a problem with TalkJS itself, or if you're not sure where the problem lies, it's better to open a chat with our support on https://talkjs.com/ (just open the chat widget). TalkJS support is staffed by engineers.
 
 ## Getting Started
