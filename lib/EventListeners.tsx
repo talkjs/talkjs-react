@@ -61,7 +61,7 @@ function EventListener(props: ListenerProps) {
 
     if (typeof target[name] !== "function") {
       console.warn(
-        `[talkjs-react] Trying to handle event ${name} which does not exist on ${target?.constructor?.name}. Did you make a typo?`,
+        `[@talkjs/react] Trying to handle event ${name} which does not exist on ${target?.constructor?.name}. Did you make a typo?`,
       );
       return;
     }
