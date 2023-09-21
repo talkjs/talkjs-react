@@ -1,6 +1,10 @@
-## v0.1.2
+## v0.1.3
 
 - Add `signature?: string` prop to `Session`
+
+## v0.1.2
+
+- ~~Add `signature?: string` prop to `Session`~~
 
 ## v0.1.1
 
