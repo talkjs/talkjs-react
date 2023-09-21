@@ -15,13 +15,14 @@ type SessionProps = UserProps &
     sessionRef?: React.MutableRefObject<Talk.Session | undefined>;
     desktopNotificationEnabled?: boolean;
     children?: ReactNode;
+    signature?: string;
   };
 
 export function Session(props: SessionProps) {
   const [ready, markReady] = useState(false);
   const [session, setSession] = useState<Talk.Session>();
 
-  const { userId, syncUser, appId, sessionRef, desktopNotificationEnabled } =
+  const { userId, syncUser, appId, signature, sessionRef, desktopNotificationEnabled } =
     props;
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export function Session(props: SessionProps) {
           ? syncUser()
           : syncUser ?? new Talk.User(userId);
 
-      const session = new Talk.Session({ appId, me });
+      const session = new Talk.Session({ appId, me, signature });
       setSession(session);
       if (sessionRef) {
         sessionRef.current = session;
