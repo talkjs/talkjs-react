@@ -13,6 +13,7 @@ type ChatboxProps = UIBoxProps<Talk.Chatbox> &
     loadingComponent?: ReactNode;
     style?: CSSProperties;
     className?: string;
+    children?: React.ReactNode;
   };
 
 export function Chatbox(props: ChatboxProps) {
@@ -39,6 +40,7 @@ function ActiveChatbox(props: ChatboxProps & { session: Talk.Session }) {
     style,
     className,
     loadingComponent,
+    children,
     ...optionsAndEvents
   } = props;
 
@@ -60,6 +62,7 @@ function ActiveChatbox(props: ChatboxProps & { session: Talk.Session }) {
       style={style}
       loadingComponent={loadingComponent}
       handlers={events}
+      children={children}
     />
   );
 }
