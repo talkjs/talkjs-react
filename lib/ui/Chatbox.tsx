@@ -1,7 +1,11 @@
-import { CSSProperties, ReactNode } from "react";
+import React, { CSSProperties, ReactNode } from "react";
 import type Talk from "talkjs";
 import { useSession } from "../SessionContext";
-import { getKeyForObject, splitObjectByPrefix } from "../util";
+import {
+  validateChildrenAreHtmlPanels,
+  getKeyForObject,
+  splitObjectByPrefix,
+} from "../util";
 import { useSetter, useConversation, useUIBox } from "../hooks";
 import { FirstParameter, UIBoxProps } from "../types";
 import { MountedBox } from "../MountedBox";
@@ -18,6 +22,12 @@ type ChatboxProps = UIBoxProps<Talk.Chatbox> &
 
 export function Chatbox(props: ChatboxProps) {
   const session = useSession();
+
+  if (!validateChildrenAreHtmlPanels(props.children)) {
+    throw new Error(
+      "<Chatbox> may only have <HtmlPanel> components as direct children.",
+    );
+  }
 
   if (session) {
     const key = getKeyForObject(session);

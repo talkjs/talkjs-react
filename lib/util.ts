@@ -1,3 +1,6 @@
+import React from "react";
+import { HtmlPanel } from "./HtmlPanel";
+
 export type Func = (...args: any) => any;
 
 export interface Mountable {
@@ -62,4 +65,12 @@ export function splitObjectByPrefix<P extends string, T extends object>(
     }
   }
   return [prefixed, unprefixed];
+}
+
+export function validateChildrenAreHtmlPanels(children?: React.ReactNode) {
+  if (!children) return true;
+
+  return React.Children.toArray(children).every((x) => {
+    return typeof x === "object" && (x as any).type === HtmlPanel;
+  });
 }

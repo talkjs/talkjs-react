@@ -274,7 +274,7 @@ Accepted props:
   loading
 - `chatboxRef` (resp. `inboxRef`, `popupRef`) - Pass a ref (created with `useRef`) and it'll be set to the vanilla JS [Chatbox](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Chatbox/) (resp. [Inbox](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Inbox/), [Popup](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Popup/)) instance. See [above](#using-refs) for an example.
 - All [Talk.ChatboxOptions](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Session/#ChatboxOptions)
-- `children?: ReactNode` - Optional. You can provide an `<HtmlPanel>` component as a child to use [HTML Panels](https://talkjs.com/docs/Features/Customizations/HTML_Panels/).
+- `children?: ReactNode` - Optional. If provided, only [`<HtmlPanel>`](https://talkjs.com/docs/Features/Customizations/HTML_Panels/) components are allowed as children.
 
 Accepted events (props that start with "on"):
 
