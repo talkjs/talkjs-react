@@ -107,7 +107,7 @@ function App() {
   const [panelHeight, setPanelHeight] = useState(100);
   const [panelVisible, setPanelVisible] = useState(true);
 
-  const [panel, setPanel] = useState(false);
+  const [renderPanel, setPanel] = useState(false);
 
   if (typeof import.meta.env.VITE_APP_ID !== "string") {
     return (
@@ -156,7 +156,7 @@ function App() {
           {...(blur ? { onBlur } : {})}
           style={{ width: 500, height: 600 }}
         >
-          {panel && (
+          {renderPanel && (
             <HtmlPanel
               url="example/panel.html"
               height={panelHeight}
@@ -174,8 +174,13 @@ function App() {
         </Chatbox>
       </Session>
 
-      <button onClick={() => setPanel((x) => !x)}>
-        toggle panel to {String(!panel)}
+      <button
+        onClick={() => {
+          setPanel((x) => !x);
+          setPanelVisible(true);
+        }}
+      >
+        {renderPanel ? "Unmount" : "Mount"} HTML panel
       </button>
       <button onClick={otherMe}>switch user (new session)</button>
       <br />

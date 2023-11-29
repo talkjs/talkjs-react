@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Talk from "talkjs";
 import { BoxContext } from "./MountedBox";
@@ -31,47 +31,38 @@ export function HtmlPanel({
   conversationId,
   children,
 }: HtmlPanelProps) {
-  const panelPromise = useRef<undefined | Promise<Talk.HtmlPanel>>(undefined);
   const [panel, setPanel] = useState<undefined | Talk.HtmlPanel>(undefined);
   const box = useContext(BoxContext);
 
   useEffect(() => {
-    function run() {
-      console.log("@@trying");
-      if (!box || panelPromise.current) return;
-      console.log("@@initializing");
+    async function run() {
+      if (!box || panel) return Promise.resolve(panel);
 
-      // const old = await panelPromise;
-      // old?.destroy();
+      const newPanel = await box.createHtmlPanel({
+        url,
+        conversation: conversationId,
+        height,
+        show: false,
+      });
 
-      const panel = box
-        .createHtmlPanel({ url, conversation: conversationId, height, show })
-        .then(async (panel) => {
-          await panel.windowLoadedPromise;
-          console.log("@@window loaded");
-          // setPanel(panel);
-          return panel;
-        });
+      await newPanel.DOMContentLoadedPromise;
+      if (show) {
+        newPanel.show();
+      }
 
-      panelPromise.current = panel;
+      setPanel(newPanel);
+      return newPanel;
     }
 
-    run();
+    const panelPromise = run();
 
-    // return () => {
-    //   console.log("@@cleanup", panelPromise);
-    //   if (panelPromise) {
-    //     panelPromise.current?.then((panel) => {
-    //       panelPromise.current = undefined;
-    //       panel.destroy().then(() => {
-    //         console.log("@@deleted");
-    //         setPanel(undefined);
-    //       });
-    //     });
-    //   } else {
-    //     setPanel(undefined);
-    //   }
-    // };
+    return () => {
+      panelPromise.then((panel) => {
+        panel?.destroy().then(() => {
+          setPanel(undefined);
+        });
+      });
+    };
     // We intentionally exclude `height` and `show` from the dependency array so
     // that we update them later via methods instead of by re-creating the
     // entire panel from scratch each time.
@@ -91,6 +82,5 @@ export function HtmlPanel({
     }
   }, [panel, show]);
 
-  // return <>{panel && createPortal(children, panel.window.document.body)}</>;
-  return null;
+  return <>{panel && createPortal(children, panel.window.document.body)}</>;
 }
