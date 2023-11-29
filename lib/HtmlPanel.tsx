@@ -21,7 +21,7 @@ type HtmlPanelProps = {
   conversationId?: string;
 
   /** The content that gets rendered inside the `<body>` of the panel. */
-  children: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 export function HtmlPanel({
@@ -34,6 +34,10 @@ export function HtmlPanel({
   const [panel, setPanel] = useState<undefined | Talk.HtmlPanel>(undefined);
   const box = useContext(BoxContext);
 
+  const normalizedPanelUrl = new URL(url, document.baseURI);
+  const baseUrl = new URL(document.baseURI);
+  const isCrossOrigin = normalizedPanelUrl.origin !== baseUrl.origin;
+
   useEffect(() => {
     async function run() {
       if (!box || panel) return Promise.resolve(panel);
@@ -42,12 +46,21 @@ export function HtmlPanel({
         url,
         conversation: conversationId,
         height,
-        show: false,
+        // If the frame is cross-origin, we can't render children into it anyway
+        // so we show the panel straight away. If we can render, we hide it
+        // first and wait for the DOMContentLoaded event to fire before showing
+        // the panel to avoid a flash of content that's missing the React
+        // portal.
+        show: isCrossOrigin,
       });
 
-      await newPanel.DOMContentLoadedPromise;
-      if (show) {
-        newPanel.show();
+      if (!isCrossOrigin) {
+        // This promise will never resolve if the panel isn't on the same origin.
+        // We skip the `await` if that's the case.
+        await newPanel.DOMContentLoadedPromise;
+        if (show) {
+          newPanel.show();
+        }
       }
 
       setPanel(newPanel);
@@ -82,5 +95,9 @@ export function HtmlPanel({
     }
   }, [panel, show]);
 
-  return <>{panel && createPortal(children, panel.window.document.body)}</>;
+  const shouldRender = !isCrossOrigin && panel && children;
+
+  return (
+    <>{shouldRender && createPortal(children, panel.window.document.body)}</>
+  );
 }

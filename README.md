@@ -286,15 +286,15 @@ Note: For `<Chatbox>` and `<Popup>`, you must provide exactly one of `conversati
 
 Accepted props:
 
-- `url: string` - The URL you want to load inside the HTML panel. The URL can be absolute or relative. We recommend using same origin pages to have better control of the page. Learn more about HTML Panels and same origin pages [here](https://talkjs.com/docs/Features/Customizations/HTML_Panels/)
+- `url: string` - The URL you want to load inside the HTML panel. The URL can be absolute or relative. Any child components provided to this component will only be rendered if `url` has the same origin as the parent page. Learn more about HTML Panels and same origin pages [here](https://talkjs.com/docs/Features/Customizations/HTML_Panels/)
 
 - `height?: number` - Optional. The panel height in pixels. Defaults to `100px`.
 
-- `show?: boolean` - Optional. Sets the visibility of the panel. Defaults to `true`.
+- `show?: boolean` - Optional. Sets the visibility of the panel. Defaults to `true`. Changing this prop is equivalent to calling [`HtmlPanel.show()`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/HtmlPanel/#HtmlPanel__show) and [`HtmlPanel.hide()`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/HtmlPanel/#HtmlPanel__hide), while re-rendering the component calls [`HtmlPanel.destroy()`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/HtmlPanel/#HtmlPanel__destroy) and [`createHtmlPanel()`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Chatbox/#Chatbox__createHtmlPanel) in the background.
 
 - `conversationId?: string` - Optional. If given, the panel will only show up for the conversation that has an `id` matching the one given.
 
-- `children: React.ReactNode` - The content that gets rendered inside the `<body>` of the panel.
+- `children?: React.ReactNode` - Optional. The content that gets rendered inside the `<body>` of the panel.
 
 
 ## Contributing

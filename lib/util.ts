@@ -67,10 +67,23 @@ export function splitObjectByPrefix<P extends string, T extends object>(
   return [prefixed, unprefixed];
 }
 
-export function validateChildrenAreHtmlPanels(children?: React.ReactNode) {
+const REACT_FRAGMENT_TYPE = React.createElement(React.Fragment).type;
+export function validateChildrenAreHtmlPanels(
+  children?: React.ReactNode,
+): boolean {
   if (!children) return true;
 
   return React.Children.toArray(children).every((x) => {
-    return typeof x === "object" && (x as any).type === HtmlPanel;
+    if (typeof x !== "object") return false;
+
+    const type = (x as any).type;
+    if (type === HtmlPanel) {
+      return true;
+    }
+    if (type === REACT_FRAGMENT_TYPE) {
+      return validateChildrenAreHtmlPanels((x as any).props.children);
+    }
+
+    return false;
   });
 }

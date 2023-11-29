@@ -2,7 +2,13 @@ import "./App.css";
 
 import { Session, Chatbox, HtmlPanel } from "../lib/main";
 import Talk from "talkjs";
-import { ChangeEvent, useCallback, useMemo, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 const convIds = ["talk-react-94872948u429843", "talk-react-194872948u429843"];
 const users = [
