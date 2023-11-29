@@ -107,6 +107,8 @@ function App() {
   const [panelHeight, setPanelHeight] = useState(100);
   const [panelVisible, setPanelVisible] = useState(true);
 
+  const [panel, setPanel] = useState(false);
+
   if (typeof import.meta.env.VITE_APP_ID !== "string") {
     return (
       <div style={{ maxWidth: "50em" }}>
@@ -154,22 +156,27 @@ function App() {
           {...(blur ? { onBlur } : {})}
           style={{ width: 500, height: 600 }}
         >
-          <HtmlPanel
-            url="/example/panel.html"
-            height={panelHeight}
-            show={panelVisible}
-          >
-            I am an HTML panel.
-            <button
-              onClick={() => setPanelHeight(panelHeight > 100 ? 100 : 150)}
+          {panel && (
+            <HtmlPanel
+              url="example/panel.html"
+              height={panelHeight}
+              show={panelVisible}
             >
-              Toggle panel height
-            </button>
-            <button onClick={() => setPanelVisible(false)}>Hide panel</button>
-          </HtmlPanel>
+              I am an HTML panel.
+              <button
+                onClick={() => setPanelHeight(panelHeight > 100 ? 100 : 150)}
+              >
+                Toggle panel height
+              </button>
+              <button onClick={() => setPanelVisible(false)}>Hide panel</button>
+            </HtmlPanel>
+          )}
         </Chatbox>
       </Session>
 
+      <button onClick={() => setPanel((x) => !x)}>
+        toggle panel to {String(!panel)}
+      </button>
       <button onClick={otherMe}>switch user (new session)</button>
       <br />
       <button onClick={switchConv}>

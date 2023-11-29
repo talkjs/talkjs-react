@@ -84,11 +84,14 @@ export function useUIBox<
     if (session?.isAlive) {
       const uibox = session[create](options) as R;
       setBox(uibox);
+      (window as any).ui = uibox;
+      console.log("@@create");
       if (ref) {
         ref.current = uibox;
       }
 
       return () => {
+        console.log("@@destroy");
         uibox.destroy();
         setBox(undefined);
       };

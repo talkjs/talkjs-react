@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Talk from "talkjs";
 import { BoxContext } from "./MountedBox";
@@ -24,11 +24,6 @@ type HtmlPanelProps = {
   children: React.ReactNode;
 };
 
-type State =
-  | { type: "none" }
-  | { type: "loading" }
-  | { type: "loaded"; panel: Talk.HtmlPanel };
-
 export function HtmlPanel({
   url,
   height = 100,
@@ -36,59 +31,66 @@ export function HtmlPanel({
   conversationId,
   children,
 }: HtmlPanelProps) {
-  const [state, setState] = useState<State>({ type: "none" });
+  const panelPromise = useRef<undefined | Promise<Talk.HtmlPanel>>(undefined);
+  const [panel, setPanel] = useState<undefined | Talk.HtmlPanel>(undefined);
   const box = useContext(BoxContext);
 
   useEffect(() => {
-    async function run() {
-      if (state.type !== "none" || !box) return;
+    function run() {
+      console.log("@@trying");
+      if (!box || panelPromise.current) return;
+      console.log("@@initializing");
 
-      setState({ type: "loading" });
-      const panel = await box.createHtmlPanel({
-        url,
-        conversation: conversationId,
-        height,
-        show,
-      });
-      await panel.windowLoadedPromise;
-      setState({ type: "loaded", panel });
+      // const old = await panelPromise;
+      // old?.destroy();
+
+      const panel = box
+        .createHtmlPanel({ url, conversation: conversationId, height, show })
+        .then(async (panel) => {
+          await panel.windowLoadedPromise;
+          console.log("@@window loaded");
+          // setPanel(panel);
+          return panel;
+        });
+
+      panelPromise.current = panel;
     }
 
     run();
 
-    return () => {
-      if (state.type === "loaded") {
-        state.panel.destroy();
-        setState({ type: "none" });
-      }
-    };
+    // return () => {
+    //   console.log("@@cleanup", panelPromise);
+    //   if (panelPromise) {
+    //     panelPromise.current?.then((panel) => {
+    //       panelPromise.current = undefined;
+    //       panel.destroy().then(() => {
+    //         console.log("@@deleted");
+    //         setPanel(undefined);
+    //       });
+    //     });
+    //   } else {
+    //     setPanel(undefined);
+    //   }
+    // };
     // We intentionally exclude `height` and `show` from the dependency array so
     // that we update them later via methods instead of by re-creating the
     // entire panel from scratch each time.
     //
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state, url, box, conversationId]);
+  }, [url, box, conversationId]);
 
   useEffect(() => {
-    if (state.type === "loaded") {
-      state.panel.setHeight(height);
-    }
-  }, [state, height]);
+    panel?.setHeight(height);
+  }, [panel, height]);
 
   useEffect(() => {
-    if (state.type === "loaded") {
-      if (show) {
-        state.panel.show();
-      } else {
-        state.panel.hide();
-      }
+    if (show) {
+      panel?.show();
+    } else {
+      panel?.hide();
     }
-  }, [state, show]);
+  }, [panel, show]);
 
-  return (
-    <>
-      {state.type === "loaded" &&
-        createPortal(children, state.panel.window.document.body)}
-    </>
-  );
+  // return <>{panel && createPortal(children, panel.window.document.body)}</>;
+  return null;
 }
