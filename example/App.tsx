@@ -1,8 +1,14 @@
 import "./App.css";
 
-import { Session, Chatbox } from "../lib/main";
+import { Session, Chatbox, HtmlPanel } from "../lib/main";
 import Talk from "talkjs";
-import { ChangeEvent, useCallback, useMemo, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 const convIds = ["talk-react-94872948u429843", "talk-react-194872948u429843"];
 const users = [
@@ -104,6 +110,11 @@ function App() {
     setDn(JSON.parse(event.target!.value));
   }, []);
 
+  const [panelHeight, setPanelHeight] = useState(100);
+  const [panelVisible, setPanelVisible] = useState(true);
+
+  const [renderPanel, setPanel] = useState(false);
+
   if (typeof import.meta.env.VITE_APP_ID !== "string") {
     return (
       <div style={{ maxWidth: "50em" }}>
@@ -150,8 +161,33 @@ function App() {
           loadingComponent={<span>LOADING....</span>}
           {...(blur ? { onBlur } : {})}
           style={{ width: 500, height: 600 }}
-        />
+        >
+          {renderPanel && (
+            <HtmlPanel
+              url="example/panel.html"
+              height={panelHeight}
+              show={panelVisible}
+            >
+              I am an HTML panel.
+              <button
+                onClick={() => setPanelHeight(panelHeight > 100 ? 100 : 150)}
+              >
+                Toggle panel height
+              </button>
+              <button onClick={() => setPanelVisible(false)}>Hide panel</button>
+            </HtmlPanel>
+          )}
+        </Chatbox>
       </Session>
+
+      <button
+        onClick={() => {
+          setPanel((x) => !x);
+          setPanelVisible(true);
+        }}
+      >
+        {renderPanel ? "Unmount" : "Mount"} HTML panel
+      </button>
       <button onClick={otherMe}>switch user (new session)</button>
       <br />
       <button onClick={switchConv}>

@@ -1,3 +1,7 @@
+## v0.1.4
+
+- Add `<HtmlPanel>` component
+
 ## v0.1.3
 
 - Add `signature?: string` prop to `Session`

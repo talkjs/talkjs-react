@@ -274,12 +274,27 @@ Accepted props:
   loading
 - `chatboxRef` (resp. `inboxRef`, `popupRef`) - Pass a ref (created with `useRef`) and it'll be set to the vanilla JS [Chatbox](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Chatbox/) (resp. [Inbox](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Inbox/), [Popup](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Popup/)) instance. See [above](#using-refs) for an example.
 - All [Talk.ChatboxOptions](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Session/#ChatboxOptions)
+- `children?: ReactNode` - Optional. If provided, only [`<HtmlPanel>`](https://talkjs.com/docs/Features/Customizations/HTML_Panels/) components are allowed as children.
 
 Accepted events (props that start with "on"):
 
 - All events accepted by [`Talk.Chatbox`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Chatbox/#Chatbox__methods) (resp. [Inbox](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Inbox/#Inbox__methods), [Popup](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Popup/#Popup__methods))
 
 Note: For `<Chatbox>` and `<Popup>`, you must provide exactly one of `conversationId` and `syncConversation`. For `<Inbox>`, leaving both unset selects the latest conversation this user participates in (if any). See [Inbox.select](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Inbox/#Inbox__select) for more information.
+
+### `<HtmlPanel>`
+
+Accepted props:
+
+- `url: string` - The URL you want to load inside the HTML panel. The URL can be absolute or relative. Any child components provided to this component will only be rendered if `url` has the same origin as the parent page. Learn more about HTML Panels and same origin pages [here](https://talkjs.com/docs/Features/Customizations/HTML_Panels/)
+
+- `height?: number` - Optional. The panel height in pixels. Defaults to `100px`.
+
+- `show?: boolean` - Optional. Sets the visibility of the panel. Defaults to `true`. Changing this prop is equivalent to calling [`HtmlPanel.show()`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/HtmlPanel/#HtmlPanel__show) and [`HtmlPanel.hide()`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/HtmlPanel/#HtmlPanel__hide), while re-rendering the component calls [`HtmlPanel.destroy()`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/HtmlPanel/#HtmlPanel__destroy) and [`createHtmlPanel()`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Chatbox/#Chatbox__createHtmlPanel) in the background.
+
+- `conversationId?: string` - Optional. If given, the panel will only show up for the conversation that has an `id` matching the one given.
+
+- `children?: React.ReactNode` - Optional. The content that gets rendered inside the `<body>` of the panel.
 
 
 ## Contributing
