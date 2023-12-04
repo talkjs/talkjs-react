@@ -50,6 +50,7 @@ function ActiveInbox(props: InboxProps & { session: Talk.Session }) {
     style,
     className,
     loadingComponent,
+    children,
     ...optionsAndEvents
   } = props;
 
@@ -77,6 +78,7 @@ function ActiveInbox(props: InboxProps & { session: Talk.Session }) {
       style={style}
       loadingComponent={loadingComponent}
       handlers={events}
+      children={children}
     />
   );
 }

@@ -8,6 +8,7 @@ import {
 import { useSetter, useConversation, useUIBox, useMountBox } from "../hooks";
 import { EventListeners } from "../EventListeners";
 import { UIBoxProps } from "../types";
+import { BoxContext } from "../MountedBox";
 
 type PopupProps = UIBoxProps<Talk.Popup> &
   Talk.PopupOptions & {
@@ -38,6 +39,7 @@ function ActivePopup(props: PopupProps & { session: Talk.Session }) {
     conversationId,
     syncConversation,
     popupRef,
+    children,
     ...optionsAndEvents
   } = props;
 
@@ -52,5 +54,10 @@ function ActivePopup(props: PopupProps & { session: Talk.Session }) {
   useConversation(session, box, syncConversation, conversationId);
   useMountBox(box, undefined);
 
-  return <EventListeners target={box} handlers={events} />;
+  return (
+    <BoxContext.Provider value={box}>
+      {children}
+      <EventListeners target={box} handlers={events} />
+    </BoxContext.Provider>
+  );
 }
