@@ -19,11 +19,11 @@ If you encounter any problems with `@talkjs/react`, please open an issue. If you
 - [React SDK reference docs](/Reference/React_SDK/Installation/)
 - [Team chat tutorial](https://talkjs.com/resources/how-to-use-talkjs-to-create-a-team-chat-with-channels/) and [example code](https://github.com/talkjs/talkjs-examples/tree/master/react/remote-work-demo)
 
-## Example
+## Examples
 
-The following example uses the [`Session`](/Reference/React_SDK/Components/Session/) and [`Chatbox`](/Reference/React_SDK/Components/Chatbox/) components from the React SDK to create a chatbox UI, and syncs a user and conversation with it with the JavaScript SDK.
+The following examples use the [`Session`](/Reference/React_SDK/Components/Session/) and [`Chatbox`](/Reference/React_SDK/Components/Chatbox/) components from the React SDK to create a chatbox UI.
 
-Install both `@talkjs/react` and the [`talkjs` JavaScript package](https://www.npmjs.com/package/talkjs):
+For both examples, you'll first need to install both `@talkjs/react` and the [`talkjs` JavaScript package](https://www.npmjs.com/package/talkjs):
 
 ```sh
 npm install talkjs @talkjs/react
@@ -31,7 +31,34 @@ npm install talkjs @talkjs/react
 yarn add talkjs @talkjs/react
 ```
 
-Then add the following code to your React app. Replace the `<APP_ID>` with your App ID from the **Settings** tab of the TalkJS dashboard:
+### Add an existing user and conversation
+
+This example demonstrates how to create a TalkJS session with an existing user and view a chatbox UI with an existing conversation. We'll use a sample user and conversation that are already included in your [test environment](/Features/Environments/).
+
+Add the following code to your React app. Replace the `<APP_ID>` with your test environment App ID from the **Settings** tab of the TalkJS dashboard:
+
+```jsx
+import { Session, Chatbox } from "@talkjs/react";
+
+function ChatComponent() {
+  return (
+    <Session appId="<APP_ID>" userId="sample_user_alice">
+      <Chatbox
+        conversationId="sample_conversation"
+        style={{ width: "100%", height: "500px" }}
+      ></Chatbox>
+    </Session>
+  );
+}
+
+export default ChatComponent;
+```
+
+### Sync a user and conversation
+
+This example demonstrates how to sync a user and conversation that you create with the JavaScript SDK.
+
+Add the following code to your React app:
 
 ```jsx
 import { useCallback } from "react";
@@ -82,6 +109,8 @@ function ChatComponent() {
 
 export default ChatComponent;
 ```
+
+For more details and explanation, see our [getting started guide](/Getting_Started/Frameworks/React/).
 
 ## Contributing
 
