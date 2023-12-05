@@ -1,8 +1,8 @@
 import "./App.css";
 
-import { Session, Chatbox } from "../lib/main";
+import { Session, Chatbox, useUnreads } from "../lib/main";
 import Talk from "talkjs";
-import { ChangeEvent, useCallback, useMemo, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useRef, useState, ReactElement } from "react";
 
 const convIds = ["talk-react-94872948u429843", "talk-react-194872948u429843"];
 const users = [
@@ -151,6 +151,7 @@ function App() {
           {...(blur ? { onBlur } : {})}
           style={{ width: 500, height: 600 }}
         />
+        <UnreadsDisplay />
       </Session>
       <button onClick={otherMe}>switch user (new session)</button>
       <br />
@@ -193,6 +194,28 @@ function App() {
       </fieldset>
     </>
   );
+}
+
+function UnreadsDisplay() {
+  const unreads = useUnreads();
+  let content: ReactElement | null = null;
+
+  if (unreads === undefined) {
+    content = <p>unreads is undefined (no session)</p>;
+  } else if (unreads.length === 0) {
+    content = <p>No unread messages</p>
+  } else {
+    content = <ul>
+      {unreads.map(u => {
+        return <li key={u.conversation.id}>{u.conversation.id} - {u.lastMessage.sender?.name || "system"}: {u.lastMessage.body}</li>
+      })}
+    </ul>
+  }
+
+  return <details>
+    <summary><strong>Unreads rendered with useUnreads</strong></summary>
+    {content}
+  </details>
 }
 
 export default App;
