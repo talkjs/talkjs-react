@@ -15,13 +15,13 @@ If you encounter any problems with `@talkjs/react`, please open an issue. If you
 
 ## Documentation
 
-- [Getting started guide](/Getting_Started/Frameworks/React/)
-- [React SDK reference docs](/Reference/React_SDK/Installation/)
+- [Getting started guide](https://talkjs.com/docs/Getting_Started/Frameworks/React/)
+- [React SDK reference docs](https://talkjs.com/docs/Reference/React_SDK/Installation/)
 - [Team chat tutorial](https://talkjs.com/resources/how-to-use-talkjs-to-create-a-team-chat-with-channels/) and [example code](https://github.com/talkjs/talkjs-examples/tree/master/react/remote-work-demo)
 
 ## Examples
 
-The following examples use the [`Session`](/Reference/React_SDK/Components/Session/) and [`Chatbox`](/Reference/React_SDK/Components/Chatbox/) components from the React SDK to create a chatbox UI.
+The following examples use the [`Session`](https://talkjs.com/docs/Reference/React_SDK/Components/Session/) and [`Chatbox`](https://talkjs.com/docs/Reference/React_SDK/Components/Chatbox/) components from the React SDK to create a chatbox UI.
 
 For both examples, you'll first need to install both `@talkjs/react` and the [`talkjs` JavaScript package](https://www.npmjs.com/package/talkjs):
 
@@ -33,7 +33,7 @@ yarn add talkjs @talkjs/react
 
 ### Add an existing user and conversation
 
-This example demonstrates how to create a TalkJS session with an existing user and view a chatbox UI with an existing conversation. We'll use a sample user and conversation that are already included in your [test environment](/Features/Environments/).
+This example demonstrates how to create a TalkJS session with an existing user and view a chatbox UI with an existing conversation. We'll use a sample user and conversation that are already included in your [test environment](https://talkjs.com/docs/Features/Environments/).
 
 Add the following code to your React app. Replace the `<APP_ID>` with your test environment App ID from the **Settings** tab of the TalkJS dashboard:
 
