@@ -6,7 +6,7 @@ This library makes it easy to use [TalkJS](https://talkjs.com) pre-built chat UI
 
 TypeScript bindings are included.
 
-If you encounter any problems with `@talkjs/react`, please open an issue. If you have a problem with TalkJS itself, or if you're not sure where the problem lies, it's better to open a chat with our support on https://talkjs.com/ (just open the chat widget). TalkJS support is staffed by engineers.
+If you encounter any problems with `@talkjs/react`, please open an issue. If you have a problem with TalkJS itself, or if you're not sure where the problem lies, it's better to open a [chat for support](https://talkjs.com/?chat). TalkJS support is staffed by engineers.
 
 ## Prerequisites
 
