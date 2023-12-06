@@ -1,6 +1,6 @@
 # React components for TalkJS
 
-This library makes it easy to use [TalkJS](https://talkjs.com) pre-built chat UIs inside a React web application.
+The `@talkjs/react` library makes it easy to use [TalkJS](https://talkjs.com) inside a React web application by providing React components for our pre-built chat UIs.
 
 `@talkjs/react` encapsulates `talkjs`, the framework-independent [TalkJS JavaScript SDK](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK). It provides React components for UI-related matters. For anything related to data manipulation, such as synchronizing user data, or creating and joining conversations, use the JavaScript SDK.
 
