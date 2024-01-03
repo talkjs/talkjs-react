@@ -1,6 +1,11 @@
+## v0.1.5
+
+- Output ES2015
+
 ## v0.1.4
 
 - Added `useUnreads` hook
+
 
 ## v0.1.3
 
