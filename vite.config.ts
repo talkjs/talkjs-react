@@ -22,6 +22,7 @@ async function renameJsx() {
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
+    target: "es2015",
     lib: {
       entry: "lib/main.tsx",
       name: "TalkJSReact",
