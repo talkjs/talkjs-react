@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import type Talk from "talkjs";
 
 export const SessionContext = createContext<Talk.Session | undefined>(
@@ -30,4 +30,35 @@ export const SessionContext = createContext<Talk.Session | undefined>(
 export function useSession() {
   const session = useContext(SessionContext);
   return session?.isAlive ? session : undefined;
+}
+
+/**
+ * Returns conversations with unread messages.
+ * 
+ * @remarks
+ * Can only be used in child components of <Session>.
+ * 
+ * @returns A list of {@link https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Session/#UnreadConversation | UnreadConversation} objects,
+ * or undefined if this hook is used outside of the <Session> component, or the session is not alive for any other reason.
+ * During development in particular, sessions can be destroyed and recreated a
+ * lot, eg due to React.StrictMode or due to hot-module reloading.
+ */
+export function useUnreads() {
+  const session = useSession();
+  const [unreads, setUnreads] = useState<Talk.UnreadConversation[] | undefined>();
+
+  useEffect(() => {
+    if (!session || !session.isAlive) {
+      setUnreads(undefined);
+      return;
+    }
+
+    const sub = session.unreads.onChange( unreads => {
+      setUnreads(unreads);
+    });
+
+    return () => sub.unsubscribe();
+  }, [session]);
+
+  return unreads;
 }

@@ -1,16 +1,29 @@
 # React components for TalkJS
 
-This library makes it easy to use the [TalkJS](https://talkjs.com) pre-built chat UIs inside a React web application.
+The `@talkjs/react` library makes it easy to use [TalkJS](https://talkjs.com) inside a React web application by providing React components for our pre-built chat UIs.
 
-`@talkjs/react` encapsulates `talkjs`, the framework-independent ("vanilla") [TalkJS JavaScript SDK](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK). It only provides React components for UI-related matters: For anything related to data manipulation, such as synchronizing user data, or creating and joining conversations, use the vanilla SDK.
+`@talkjs/react` encapsulates `talkjs`, the framework-independent [TalkJS JavaScript SDK](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK). For anything related to data manipulation, such as synchronizing user data, or creating and joining conversations, use the JavaScript SDK.
 
 TypeScript bindings are included.
 
-If you encounter any problems with `@talkjs/react`, please open an issue. If you have a problem with TalkJS itself, or if you're not sure where the problem lies, it's better to open a chat with our support on https://talkjs.com/ (just open the chat widget). TalkJS support is staffed by engineers.
+If you encounter any problems with `@talkjs/react`, please open an issue. If you have a problem with TalkJS itself, or if you're not sure where the problem lies, it's better to open a [chat for support](https://talkjs.com/?chat). TalkJS support is staffed by engineers.
 
-## Getting Started
+## Prerequisites
 
-Install both `@talkjs/react` and the vanilla [TalkJS NPM package](https://www.npmjs.com/package/talkjs):
+- A [TalkJS account](https://talkjs.com/dashboard/login). TalkJS provides a ready-to-use chat client for your application. Your account gives you access to TalkJS's free development environment.
+- A [React app](https://react.dev/learn/start-a-new-react-project) that you will add TalkJS to
+
+## Documentation
+
+- [Getting started guide](https://talkjs.com/docs/Getting_Started/Frameworks/React/)
+- [React SDK reference docs](https://talkjs.com/docs/Reference/React_SDK/Installation/)
+- [Team chat tutorial](https://talkjs.com/resources/how-to-use-talkjs-to-create-a-team-chat-with-channels/) and [example code](https://github.com/talkjs/talkjs-examples/tree/master/react/remote-work-demo)
+
+## Examples
+
+The following examples use the [`Session`](https://talkjs.com/docs/Reference/React_SDK/Components/Session/) and [`Chatbox`](https://talkjs.com/docs/Reference/React_SDK/Components/Chatbox/) components from the React SDK to create a chatbox UI.
+
+For both examples, you'll first need to install both `@talkjs/react` and the [`talkjs` JavaScript package](https://www.npmjs.com/package/talkjs):
 
 ```sh
 npm install talkjs @talkjs/react
@@ -18,284 +31,86 @@ npm install talkjs @talkjs/react
 yarn add talkjs @talkjs/react
 ```
 
-`@talkjs/react` is just a thin wrapper around `talkjs`. Notably, it is designed such that when you update to a new version of `talkjs` that exposes new options, methods or events, you can use these right away from the React components, without having to update `@talkjs/react` (or wait for such an update to be published)
+### Add an existing user and conversation
 
-## Load a UI for existing chat data
+This example demonstrates how to create a TalkJS session with an existing user and view a chatbox UI with an existing conversation. We'll use a sample user and conversation that are already included in your [test environment](https://talkjs.com/docs/Features/Environments/).
 
-### 1. Create a session
+Add the following code to your React app. Replace the `<APP_ID>` with your test environment App ID from the **Settings** tab of the TalkJS dashboard:
 
-Wrap your main app components in a session:
+```jsx
+import { Session, Chatbox } from "@talkjs/react";
 
-```tsx
-import { Session } from "@talkjs/react";
-
-//...
-
-<Session appId={/* your app ID, find it in the dashboard */} userId="pete">
-  {/* your main app here here */}
-</Session>;
-```
-
-This assumes user `pete` exists in TalkJS.
-
-The session encapsulates a connection to the TalkJS realtime infrastructure, and this connection will live as long as the session component is mounted. If you want to listen for events or show desktop notifications for new messages, we recommend putting the session at the top of your component hierarchy, so it's active even when no chat UI is being shown.
-
-### 2. Create a chatbox
-
-Anywhere inside the children of `<Session>` you can create a `<Chatbox>`, an `<Inbox>` or a `<Popup>`:
-
-```tsx
-import { Chatbox } from "@talkjs/react";
-
-//...
-
-<Chatbox
-  conversation="welcome"
-  style={{ width: 400, height: 600 }}
-  className="chat-container"
-/>;
-```
-
-This assumes conversation `welcome` exists in TalkJS, with `pete` as a participant.
-
-The code above will render a `div` with the `style` and `className` passed through, and put a TalkJS Chatbox inside it. If you change the value of the `conversation` prop, the chatbox will switch to another conversation.
-
-## Manipulating data
-
-If your security settings allow, TalkJS lets you create users and join conversations from the client side. This lets you synchronize user data with TalkJS in a just-in-time fashion.
-
-You manipulate data exactly as you would if you directly used the [vanilla JavaScript SDK](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK).
-
-### 1. Synchronize user data
-
-To create or update user data, just replace the `userId` prop by `syncUser`. This prop expects a callback that uses the vanilla TalkJS SDK to create a `Talk.User` object:
-
-```tsx
-import { useCallback } from "react";
-import { Session } from "@talkjs/react";
-import Talk from "talkjs";
-
-//...
-
-const syncUser = useCallback(
-  () =>
-    // regular vanilla TalkJS code here
-    new Talk.User({
-      id: "pete",
-      name: "Pete",
-      photoUrl: "https://example.com/pete.jpg",
-      //...
-    }),
-  []
-);
-
-<Session
-  appId={/* your app ID, find it in the dashboard */}
-  syncUser={syncUser}
->
-  {/* your main app here here */}
-</Session>;
-```
-
-Note: you can't create `Talk.User` object before the TalkJS SDK has initialized. In vanilla JS you'd have to await `Talk.ready` promise for this, but `@talkjs/react` ensures that your `syncUser` callback is only called after TalkJS is ready.
-
-### 2. Create and join a conversation
-
-Similarly, `<Chatbox>`, `<Inbox>` and `<Popup>` let you lazily create or update conversations with the `syncConversation` prop.
-
-Just replace the `conversation` prop by a `syncConversation` callback, which will be invoked just before the chatbox is created. Then, use the provided [`session`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Session) object to create a [`ConversationBuilder`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/ConversationBuilder/#ConversationBuilder) using [`getOrCreateConversation`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Session/#Session__getOrCreateConversation):
-
-```tsx
-import { useCallback } from "react";
-import { Chatbox } from "@talkjs/react";
-import Talk from "talkjs";
-
-//...
-
-const syncConversation = useCallback((session: Talk.Session) => {
-  // regular vanilla TalkJS code here
-  const conversation = session.getOrCreateConversation("welcome");
-  conversation.setParticipant(session.me);
-  return conversation;
-}, []);
-
-<Chatbox
-  syncConversation={syncConversation}
-  style={{ width: 400, height: 600 }}
-  className="chat-container"
-/>;
-```
-
-## Events
-
-All events supported by the [TalkJS JavaScript SDK](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK) are exposed on the React components as props. For example:
-
-```tsx
-<Session
-  appId={/*...*/}
-  userId={/*...*/}
-  onMessage={message => console.log(message.body)}
-  onUnreadsChange={unreads => console.log(unreads.length)}
->
-```
-
-All events supported by `<Session>` are listed in [the `Talk.Session` reference](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Session/#Session__methods): Any method that starts with `on` is exposed as an event prop in React.
-
-Note that [`Session.unreads.onChange`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Session/#Unreads__onChange) is exposed directly on the `<Session>` as a prop named `onUnreadsChange`.
-
-Similarly, for `<Chatbox>` ([vanilla sdk](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Chatbox/#Chatbox__methods)), `<Inbox>` ([vanilla sdk](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Chatbox/#Chatbox__methods)) or `<Popup>` ([vanilla sdk](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Chatbox/#Chatbox__methods)):
-
-```tsx
-<Chatbox
-  conversationId={/*...*/}
-  onSendMessage={(event) => console.log(event.message.text)}
-  onCustomMessageAction={(event) => console.log(event.action)}
-  onSomethingSomething={/* callback */}
-/>
-```
-
-Again, any method that starts with `on` is exposed as a prop.
-
-## Options
-
-TalkJS supports a lot of options that let you finetune the behavior of the chat UI. Any option that can be passed to [`createChatbox`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Session/#Session__createChatbox), [`createInbox`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Session/#Session__createInbox) and [`createPopup`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Session/#Session__createPopup) can be passed as a prop:
-
-```tsx
-<Inbox
-  // only show conversations where `custom.state != 'hidden'`
-  feedFilter={{ custom: { state: ["!=", "hidden"] } }}
-  showMobileBackButton={false}
-  messageField={{ placeholder: "Write a message.." }}
-  //...
-/>
-```
-
-If any of these props change, `<Inbox>` will apply it directly through a setter such as [`setFeedFilter`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Inbox/#Inbox__setFeedFilter). If no such setter exists, it will recreate the `Talk.Inbox`.
-
-## Loading
-
-TalkJS loads quickly but not always instantaneously. If you want to display something while TalkJS is loading, pass a react node to the `loadingComponent` prop:
-
-```tsx
-<Inbox
-  //...
-  loadingComponent={<h1>Loading..</h1>}
-/>
-```
-
-## Direct access to TalkJS internals
-
-If you need to do things with your
-`Talk.Session`, `Talk.Chatbox`, `Talk.Inbox` or `Talk.Popup` instances that the react bindings to not let you do, you can get a direct reference to it.
-
-### Using hooks
-
-In any child component of `<Session>` you can call the `useSession` hook to get the `Talk.Session` object:
-
-```tsx
-import { useSession } from "@talkjs/react";
-
-function MyComponent(props) {
-  const session = useSession(); // Talk.Session | undefined
-
-  useEffect(() => {
-    if (session?.isAlive) {
-      session.getOrCreateConversation("welcome").sendMessage("hi");
-    }
-  }, []);
+function ChatComponent() {
+  return (
+    <Session appId="<APP_ID>" userId="sample_user_alice">
+      <Chatbox
+        conversationId="sample_conversation"
+        style={{ width: "100%", height: "500px" }}
+      ></Chatbox>
+    </Session>
+  );
 }
+
+export default ChatComponent;
 ```
 
-Note that the value may be undefined if the session has not yet loaded or has
-since been destroyed. See the section on liveness below.
+### Sync a user and conversation
 
-### Using refs
+This example demonstrates how to sync a user and conversation that you create with the JavaScript SDK.
 
+Add the following code to your React app:
 
-All `@talkjs/react` components let you assign the underlying TalkJS object to a
-ref:
+```jsx
+import { useCallback } from "react";
+import Talk from "talkjs";
+import { Session, Chatbox } from "@talkjs/react";
 
-```tsx
-const session = useRef<Talk.Session>();
-const chatbox = useRef<Talk.Chatbox>();
+function ChatComponent() {
+  const syncUser = useCallback(
+    () =>
+      new Talk.User({
+        id: "nina",
+        name: "Nina",
+        email: "nina@example.com",
+        photoUrl: "https://talkjs.com/new-web/avatar-7.jpg",
+        welcomeMessage: "Hi!",
+        role: "default",
+      }),
+    [],
+  );
 
-//...
+  const syncConversation = useCallback((session) => {
+    // JavaScript SDK code here
+    const conversation = session.getOrCreateConversation("welcome");
 
-onSomeEvent = useCallback(async () => {
-  // do something with the chatbox
-  if (chatbox.current?.isAlive) {
-    chatbox.current.sendLocation();
-  }
-  // do something with the session.
-  if (session.current?.isAlive) {
-    const inboxes = await session.current.getInboxes();
-  }
-}, []);
+    const other = new Talk.User({
+      id: "frank",
+      name: "Frank",
+      email: "frank@example.com",
+      photoUrl: "https://talkjs.com/new-web/avatar-8.jpg",
+      welcomeMessage: "Hey, how can I help?",
+      role: "default",
+    });
+    conversation.setParticipant(session.me);
+    conversation.setParticipant(other);
 
-<Session /*...*/ sessionRef={session}>
-  <Chatbox /*...*/ chatboxRef={chatbox} />
-</Session>;
+    return conversation;
+  }, []);
+
+  return (
+    <Session appId="<APP_ID>" syncUser={syncUser}>
+      <Chatbox
+        syncConversation={syncConversation}
+        style={{ width: "100%", height: "500px" }}
+      ></Chatbox>
+    </Session>
+  );
+}
+
+export default ChatComponent;
 ```
 
-The ref will be set once the Talk.Chatbox object has been created (resp. when the Talk.Session has initialized), and it will be set back to `undefined` once it has been destroyed.
-
-### Liveness
-
-Make sure you always check the `isAlive` property to ensure that the object is
-not destroyed because React is prone to trigger race conditions here (especially
-when React.StrictMode is enabled or when using a development setup with Hot
-Module Reloading, both of which cause a lot of destroying).
-
-## Reference
-
-### `<Session>`
-
-Accepted props:
-
-- `appId: string` - your app ID from the TalkJS dashboard
-- `userId: string` - required unless `syncUser` is given
-- `syncUser: Talk.User | () => Talk.User` - required unless `userId` is given
-- `sessionRef: React.MutableRefObject<Talk.Session>` - See [above](#using-refs)
-
-Accepted events (props that start with "on"):
-
-- all events accepted by [`Talk.Session`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Session/#Session__methods)
-- `onUnreadsChange` - as in [`Unreads.onChange`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Session/#Unreads__onChange)
-
-### `<Chatbox>`, `<Inbox>` and `<Popup>`
-
-Accepted props:
-
-- `conversationId: string` - Selects this conversation. If the conversation does not exist, the "Not found" screen is shown.
-- `syncConversation: Talk.ConversationBuilder | () => Talk.ConversationBuilder` - Creates or updates the given conversation using the supplied ConversationBuilder, then selects it. 
-- `style: CSSProperties` - Optional. Passed through to the `div` that will contain the chatbox
-- `className: string` - Optional. Passed through to the `div` that will contain the chatbox
-- `loadingComponent: ReactNode` - Optional. A react node which will be shown while the chatbox is
-  loading
-- `chatboxRef` (resp. `inboxRef`, `popupRef`) - Pass a ref (created with `useRef`) and it'll be set to the vanilla JS [Chatbox](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Chatbox/) (resp. [Inbox](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Inbox/), [Popup](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Popup/)) instance. See [above](#using-refs) for an example.
-- All [Talk.ChatboxOptions](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Session/#ChatboxOptions)
-- `children?: ReactNode` - Optional. If provided, only [`<HtmlPanel>`](https://talkjs.com/docs/Features/Customizations/HTML_Panels/) components are allowed as children.
-
-Accepted events (props that start with "on"):
-
-- All events accepted by [`Talk.Chatbox`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Chatbox/#Chatbox__methods) (resp. [Inbox](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Inbox/#Inbox__methods), [Popup](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Popup/#Popup__methods))
-
-Note: For `<Chatbox>` and `<Popup>`, you must provide exactly one of `conversationId` and `syncConversation`. For `<Inbox>`, leaving both unset selects the latest conversation this user participates in (if any). See [Inbox.select](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Inbox/#Inbox__select) for more information.
-
-### `<HtmlPanel>`
-
-Accepted props:
-
-- `url: string` - The URL you want to load inside the HTML panel. The URL can be absolute or relative. Any child components provided to this component will only be rendered if `url` has the same origin as the parent page. Learn more about HTML Panels and same origin pages [here](https://talkjs.com/docs/Features/Customizations/HTML_Panels/)
-
-- `height?: number` - Optional. The panel height in pixels. Defaults to `100px`.
-
-- `show?: boolean` - Optional. Sets the visibility of the panel. Defaults to `true`. Changing this prop is equivalent to calling [`HtmlPanel.show()`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/HtmlPanel/#HtmlPanel__show) and [`HtmlPanel.hide()`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/HtmlPanel/#HtmlPanel__hide), while re-rendering the component calls [`HtmlPanel.destroy()`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/HtmlPanel/#HtmlPanel__destroy) and [`createHtmlPanel()`](https://talkjs.com/docs/Reference/JavaScript_Chat_SDK/Chatbox/#Chatbox__createHtmlPanel) in the background.
-
-- `conversationId?: string` - Optional. If given, the panel will only show up for the conversation that has an `id` matching the one given.
-
-- `children?: React.ReactNode` - Optional. The content that gets rendered inside the `<body>` of the panel.
-
+For more details and explanation, see our [getting started guide](https://talkjs.com/docs/Getting_Started/Frameworks/React/).
 
 ## Contributing
 
@@ -307,7 +122,7 @@ Should you want to contribute, please take note of the design notes below.
 
 ## Design notes
 
-This library has been designed to be maximally forward-compatible with future TalkJS features. The `talkjs` package is a peer dependency, not a direct dependency, which means you can control which TalkJS version you want to be on. It also means you won't need to wait for a new version of `@talkjs/react` to be published before you can get access to new TalkJS features. 
+This library has been designed to be maximally forward-compatible with future TalkJS features. The `talkjs` package is a peer dependency, not a direct dependency, which means you can control which TalkJS version you want to be on. It also means you won't need to wait for a new version of `@talkjs/react` to be published before you can get access to new TalkJS features.
 
 From our (TalkJS) perspective, it means we have a lower maintenance burden: we can ship new JS features without having to update (and test and verify) `@talkjs/react`.
 

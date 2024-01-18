@@ -1,13 +1,14 @@
 import "./App.css";
 
-import { Session, Chatbox, HtmlPanel } from "../lib/main";
+import { Session, Chatbox, HtmlPanel, useUnreads } from "../lib/main";
 import Talk from "talkjs";
-import React, {
+import {
   ChangeEvent,
   useCallback,
   useMemo,
   useRef,
   useState,
+  ReactElement,
 } from "react";
 
 const convIds = ["talk-react-94872948u429843", "talk-react-194872948u429843"];
@@ -178,6 +179,7 @@ function App() {
             </HtmlPanel>
           )}
         </Chatbox>
+        <UnreadsDisplay />
       </Session>
 
       <button
@@ -228,6 +230,39 @@ function App() {
         </label>
       </fieldset>
     </>
+  );
+}
+
+function UnreadsDisplay() {
+  const unreads = useUnreads();
+  let content: ReactElement | null = null;
+
+  if (unreads === undefined) {
+    content = <p>unreads is undefined (no session)</p>;
+  } else if (unreads.length === 0) {
+    content = <p>No unread messages</p>;
+  } else {
+    content = (
+      <ul>
+        {unreads.map((u) => {
+          return (
+            <li key={u.conversation.id}>
+              {u.conversation.id} - {u.lastMessage.sender?.name || "system"}:{" "}
+              {u.lastMessage.body}
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
+
+  return (
+    <details>
+      <summary>
+        <strong>Unreads rendered with useUnreads</strong>
+      </summary>
+      {content}
+    </details>
   );
 }
 
