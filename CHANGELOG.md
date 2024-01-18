@@ -1,3 +1,9 @@
+## v0.1.6-beta.0
+
+- Add `<HtmlPanel>` component
+
+**Note:** This component is currently experimental.
+
 ## v0.1.5
 
 - Output ES2015
