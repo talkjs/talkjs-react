@@ -2,7 +2,7 @@ import { CSSProperties, ReactNode } from "react";
 import type Talk from "talkjs";
 import { useSession } from "../SessionContext";
 import { getKeyForObject, splitObjectByPrefix } from "../util";
-import { useSetter, useConversation, useUIBox } from "../hooks";
+import { useMethod, useConversation, useUIBox } from "../hooks";
 import { FirstParameter, UIBoxProps } from "../types";
 import { MountedBox } from "../MountedBox";
 
@@ -53,10 +53,10 @@ function ActiveInbox(props: InboxProps & { session: Talk.Session }) {
   } = options;
 
   const box = useUIBox(session, "createInbox", simpleOptions, inboxRef);
-  useSetter(box, messageFilter, "setMessageFilter");
-  useSetter(box, feedFilter, "setFeedFilter");
-  useSetter(box, presence, "setPresence");
-  useSetter(box, highlightedWords, "setHighlightedWords");
+  useMethod(box, messageFilter, "setMessageFilter");
+  useMethod(box, feedFilter, "setFeedFilter");
+  useMethod(box, presence, "setPresence");
+  useMethod(box, highlightedWords, "setHighlightedWords");
   useConversation(session, box, syncConversation, conversationId, asGuest);
 
   return (

@@ -2,7 +2,7 @@ import { CSSProperties, ReactNode } from "react";
 import type Talk from "talkjs";
 import { useSession } from "../SessionContext";
 import { getKeyForObject, splitObjectByPrefix } from "../util";
-import { useSetter, useConversation, useUIBox } from "../hooks";
+import { useMethod, useConversation, useUIBox } from "../hooks";
 import { FirstParameter, UIBoxProps } from "../types";
 import { MountedBox } from "../MountedBox";
 
@@ -48,9 +48,9 @@ function ActiveChatbox(props: ChatboxProps & { session: Talk.Session }) {
     options;
 
   const box = useUIBox(session, "createChatbox", simpleOptions, chatboxRef);
-  useSetter(box, messageFilter, "setMessageFilter");
-  useSetter(box, presence, "setPresence");
-  useSetter(box, highlightedWords, "setHighlightedWords");
+  useMethod(box, messageFilter, "setMessageFilter");
+  useMethod(box, presence, "setPresence");
+  useMethod(box, highlightedWords, "setHighlightedWords");
   useConversation(session, box, syncConversation, conversationId, asGuest);
 
   return (

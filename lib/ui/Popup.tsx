@@ -1,7 +1,7 @@
 import Talk from "talkjs";
 import { useSession } from "../SessionContext";
 import { getKeyForObject, splitObjectByPrefix } from "../util";
-import { useSetter, useConversation, useUIBox, useMountBox } from "../hooks";
+import { useMethod, useConversation, useUIBox, useMountBox } from "../hooks";
 import { EventListeners } from "../EventListeners";
 import { UIBoxProps } from "../types";
 
@@ -36,9 +36,9 @@ function ActivePopup(props: PopupProps & { session: Talk.Session }) {
     options;
 
   const box = useUIBox(session, "createPopup", simpleOptions, popupRef);
-  useSetter(box, messageFilter, "setMessageFilter");
-  useSetter(box, presence, "setPresence");
-  useSetter(box, highlightedWords, "setHighlightedWords");
+  useMethod(box, messageFilter, "setMessageFilter");
+  useMethod(box, presence, "setPresence");
+  useMethod(box, highlightedWords, "setHighlightedWords");
   useConversation(session, box, syncConversation, conversationId, asGuest);
   useMountBox(box, undefined);
 

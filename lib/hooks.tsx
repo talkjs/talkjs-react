@@ -24,27 +24,27 @@ export function usePreviousIfDeeplyEqual<T>(val: T) {
 }
 
 /**
- * Calls method `setter` on `box` with `value`, iff `value` is set & deeply
+ * Calls method `method` on `box` with `value`, iff `value` is set & deeply
  * different from before (and the box is alive)
  */
-export function useSetter<
+export function useMethod<
   V,
   S extends string,
   T extends TalkObject & Record<S, (val: V) => any>,
->(box: T | undefined, value: V | undefined, setter: S) {
+>(box: T | undefined, value: V | undefined, method: S) {
   value = usePreviousIfDeeplyEqual(value);
   useEffect(() => {
     if (value !== undefined && box?.isAlive) {
-      box[setter](value);
+      box[method](value);
     }
-  }, [setter, box, value]);
+  }, [method, box, value]);
 }
 
 /**
- * Calls method `setter` on `box` with the arguments `args`, iff `args` is set &
- * deeply different from before (and the box is alive)
+ * Like {@link useMethod}, except `args` is an array that gets spread into
+ * the method call
  */
-export function useSpreadSetter<
+export function useSpreadMethod<
   V extends any[],
   S extends string,
   T extends TalkObject & Record<S, (...args: V) => any>,
@@ -77,10 +77,10 @@ export function useConversation<T extends Talk.UIBox>(
   }, [session, syncConversation, conversationId]);
 
   const args = (
-    conversation !== undefined ? [conversation, { asGuest }] : []
+    conversation !== undefined ? [conversation, { asGuest }] : undefined
   ) as any;
 
-  useSpreadSetter(box, args, "select");
+  useSpreadMethod(box, args, "select");
 }
 
 // subset of Session to help TypeScript pick the right overloads
