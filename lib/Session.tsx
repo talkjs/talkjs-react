@@ -3,7 +3,7 @@ import Talk from "talkjs";
 import { SessionContext } from "./SessionContext";
 import { SessionEvents } from "./types";
 import { EventListeners } from "./EventListeners";
-import { useSetter } from "./hooks";
+import { useMethod } from "./hooks";
 
 type UserProps =
   | { userId: string; syncUser?: undefined }
@@ -22,8 +22,14 @@ export function Session(props: SessionProps) {
   const [ready, markReady] = useState(false);
   const [session, setSession] = useState<Talk.Session>();
 
-  const { userId, syncUser, appId, signature, sessionRef, desktopNotificationEnabled } =
-    props;
+  const {
+    userId,
+    syncUser,
+    appId,
+    signature,
+    sessionRef,
+    desktopNotificationEnabled,
+  } = props;
 
   useEffect(() => {
     Talk.ready.then(() => markReady(true));
@@ -55,9 +61,9 @@ export function Session(props: SessionProps) {
         }
       };
     }
-  }, [ready, appId, userId, syncUser, sessionRef]);
+  }, [ready, signature, appId, userId, syncUser, sessionRef]);
 
-  useSetter(
+  useMethod(
     session,
     desktopNotificationEnabled,
     "setDesktopNotificationEnabled",
