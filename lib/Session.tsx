@@ -61,7 +61,7 @@ export function Session(props: SessionProps) {
         }
       };
     }
-  }, [ready, appId, userId, syncUser, sessionRef]);
+  }, [ready, signature, appId, userId, syncUser, sessionRef]);
 
   useMethod(
     session,
