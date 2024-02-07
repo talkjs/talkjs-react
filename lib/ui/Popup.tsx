@@ -5,7 +5,7 @@ import {
   splitObjectByPrefix,
   validateChildrenAreHtmlPanels,
 } from "../util";
-import { useSetter, useConversation, useUIBox, useMountBox } from "../hooks";
+import { useMethod, useConversation, useUIBox, useMountBox } from "../hooks";
 import { EventListeners } from "../EventListeners";
 import { UIBoxProps } from "../types";
 import { BoxContext } from "../MountedBox";
@@ -38,6 +38,7 @@ function ActivePopup(props: PopupProps & { session: Talk.Session }) {
     session,
     conversationId,
     syncConversation,
+    asGuest,
     popupRef,
     children,
     ...optionsAndEvents
@@ -48,10 +49,10 @@ function ActivePopup(props: PopupProps & { session: Talk.Session }) {
     options;
 
   const box = useUIBox(session, "createPopup", simpleOptions, popupRef);
-  useSetter(box, messageFilter, "setMessageFilter");
-  useSetter(box, presence, "setPresence");
-  useSetter(box, highlightedWords, "setHighlightedWords");
-  useConversation(session, box, syncConversation, conversationId);
+  useMethod(box, messageFilter, "setMessageFilter");
+  useMethod(box, presence, "setPresence");
+  useMethod(box, highlightedWords, "setHighlightedWords");
+  useConversation(session, box, syncConversation, conversationId, asGuest);
   useMountBox(box, undefined);
 
   return (

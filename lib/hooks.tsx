@@ -24,20 +24,37 @@ export function usePreviousIfDeeplyEqual<T>(val: T) {
 }
 
 /**
- * Calls method `setter` on `box` with `value`, iff `value` is set & deeply
+ * Calls method `method` on `box` with `value`, iff `value` is set & deeply
  * different from before (and the box is alive)
  */
-export function useSetter<
+export function useMethod<
   V,
   S extends string,
   T extends TalkObject & Record<S, (val: V) => any>,
->(box: T | undefined, value: V | undefined, setter: S) {
+>(box: T | undefined, value: V | undefined, method: S) {
   value = usePreviousIfDeeplyEqual(value);
   useEffect(() => {
     if (value !== undefined && box?.isAlive) {
-      box[setter](value);
+      box[method](value);
     }
-  }, [setter, box, value]);
+  }, [method, box, value]);
+}
+
+/**
+ * Like {@link useMethod}, except `args` is an array that gets spread into
+ * the method call
+ */
+export function useSpreadMethod<
+  V extends any[],
+  S extends string,
+  T extends TalkObject & Record<S, (...args: V) => any>,
+>(box: T | undefined, args: V | undefined, method: S) {
+  args = usePreviousIfDeeplyEqual(args);
+  useEffect(() => {
+    if (args !== undefined && box?.isAlive) {
+      box[method](...args);
+    }
+  }, [method, box, args]);
 }
 
 /**
@@ -50,6 +67,7 @@ export function useConversation<T extends Talk.UIBox>(
   box: T | undefined,
   syncConversation: ConversationProps["syncConversation"],
   conversationId: ConversationProps["conversationId"],
+  asGuest: boolean | undefined,
 ) {
   const conversation = useMemo(() => {
     if (typeof syncConversation === "function") {
@@ -57,7 +75,12 @@ export function useConversation<T extends Talk.UIBox>(
     }
     return syncConversation ?? conversationId;
   }, [session, syncConversation, conversationId]);
-  useSetter(box, conversation, "select");
+
+  const args = (
+    conversation !== undefined ? [conversation, { asGuest }] : undefined
+  ) as any;
+
+  useSpreadMethod(box, args, "select");
 }
 
 // subset of Session to help TypeScript pick the right overloads

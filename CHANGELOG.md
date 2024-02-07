@@ -1,3 +1,13 @@
+## v0.1.7-beta.0
+
+- Add `<HtmlPanel>` component
+
+**Note:** This component is currently experimental.
+
+## v0.1.6
+
+- Add `asGuest?: boolean` prop to `Chatbox`, `Inbox` and `Popup`
+
 ## v0.1.6-beta.0
 
 - Add `<HtmlPanel>` component

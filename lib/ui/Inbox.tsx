@@ -6,7 +6,7 @@ import {
   splitObjectByPrefix,
   validateChildrenAreHtmlPanels,
 } from "../util";
-import { useSetter, useConversation, useUIBox } from "../hooks";
+import { useMethod, useConversation, useUIBox } from "../hooks";
 import { FirstParameter, UIBoxProps } from "../types";
 import { MountedBox } from "../MountedBox";
 
@@ -46,6 +46,7 @@ function ActiveInbox(props: InboxProps & { session: Talk.Session }) {
     session,
     conversationId,
     syncConversation,
+    asGuest,
     inboxRef,
     style,
     className,
@@ -64,11 +65,11 @@ function ActiveInbox(props: InboxProps & { session: Talk.Session }) {
   } = options;
 
   const box = useUIBox(session, "createInbox", simpleOptions, inboxRef);
-  useSetter(box, messageFilter, "setMessageFilter");
-  useSetter(box, feedFilter, "setFeedFilter");
-  useSetter(box, presence, "setPresence");
-  useSetter(box, highlightedWords, "setHighlightedWords");
-  useConversation(session, box, syncConversation, conversationId);
+  useMethod(box, messageFilter, "setMessageFilter");
+  useMethod(box, feedFilter, "setFeedFilter");
+  useMethod(box, presence, "setPresence");
+  useMethod(box, highlightedWords, "setHighlightedWords");
+  useConversation(session, box, syncConversation, conversationId, asGuest);
 
   return (
     <MountedBox

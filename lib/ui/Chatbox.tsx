@@ -6,7 +6,7 @@ import {
   getKeyForObject,
   splitObjectByPrefix,
 } from "../util";
-import { useSetter, useConversation, useUIBox } from "../hooks";
+import { useMethod, useConversation, useUIBox } from "../hooks";
 import { FirstParameter, UIBoxProps } from "../types";
 import { MountedBox } from "../MountedBox";
 
@@ -46,6 +46,7 @@ function ActiveChatbox(props: ChatboxProps & { session: Talk.Session }) {
     session,
     conversationId,
     syncConversation,
+    asGuest,
     chatboxRef,
     style,
     className,
@@ -59,10 +60,10 @@ function ActiveChatbox(props: ChatboxProps & { session: Talk.Session }) {
     options;
 
   const box = useUIBox(session, "createChatbox", simpleOptions, chatboxRef);
-  useSetter(box, messageFilter, "setMessageFilter");
-  useSetter(box, presence, "setPresence");
-  useSetter(box, highlightedWords, "setHighlightedWords");
-  useConversation(session, box, syncConversation, conversationId);
+  useMethod(box, messageFilter, "setMessageFilter");
+  useMethod(box, presence, "setPresence");
+  useMethod(box, highlightedWords, "setHighlightedWords");
+  useConversation(session, box, syncConversation, conversationId, asGuest);
 
   return (
     <MountedBox
