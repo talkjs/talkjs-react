@@ -35,6 +35,7 @@ function ActiveInbox(props: InboxProps & { session: Talk.Session }) {
     session,
     conversationId,
     syncConversation,
+    asGuest,
     inboxRef,
     style,
     className,
@@ -56,7 +57,7 @@ function ActiveInbox(props: InboxProps & { session: Talk.Session }) {
   useSetter(box, feedFilter, "setFeedFilter");
   useSetter(box, presence, "setPresence");
   useSetter(box, highlightedWords, "setHighlightedWords");
-  useConversation(session, box, syncConversation, conversationId);
+  useConversation(session, box, syncConversation, conversationId, asGuest);
 
   return (
     <MountedBox

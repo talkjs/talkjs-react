@@ -26,6 +26,7 @@ function ActivePopup(props: PopupProps & { session: Talk.Session }) {
     session,
     conversationId,
     syncConversation,
+    asGuest,
     popupRef,
     ...optionsAndEvents
   } = props;
@@ -38,7 +39,7 @@ function ActivePopup(props: PopupProps & { session: Talk.Session }) {
   useSetter(box, messageFilter, "setMessageFilter");
   useSetter(box, presence, "setPresence");
   useSetter(box, highlightedWords, "setHighlightedWords");
-  useConversation(session, box, syncConversation, conversationId);
+  useConversation(session, box, syncConversation, conversationId, asGuest);
   useMountBox(box, undefined);
 
   return <EventListeners target={box} handlers={events} />;

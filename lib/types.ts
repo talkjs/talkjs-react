@@ -43,7 +43,7 @@ export type ConversationProps =
     };
 
 export type UIBoxProps<T extends Talk.UIBox> = UIBoxEvents<T> &
-  ConversationProps;
+  ConversationProps & { asGuest?: boolean };
 
 declare const testChatboxEvents: UIBoxEvents<Talk.Chatbox>;
 declare const testInboxEvents: UIBoxEvents<Talk.Inbox>;

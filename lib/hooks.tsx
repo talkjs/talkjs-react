@@ -41,6 +41,23 @@ export function useSetter<
 }
 
 /**
+ * Calls method `setter` on `box` with the arguments `args`, iff `args` is set &
+ * deeply different from before (and the box is alive)
+ */
+export function useSpreadSetter<
+  V extends any[],
+  S extends string,
+  T extends TalkObject & Record<S, (...args: V) => any>,
+>(box: T | undefined, args: V | undefined, setter: S) {
+  args = usePreviousIfDeeplyEqual(args);
+  useEffect(() => {
+    if (args !== undefined && box?.isAlive) {
+      box[setter](...args);
+    }
+  }, [setter, box, args]);
+}
+
+/**
  * Calls `box.select` with either `syncConversation` or `conversationId`
  * depending on which is set. If neither is set, which is valid for the Inbox,
  * `select` is not called at all.
@@ -50,6 +67,7 @@ export function useConversation<T extends Talk.UIBox>(
   box: T | undefined,
   syncConversation: ConversationProps["syncConversation"],
   conversationId: ConversationProps["conversationId"],
+  asGuest: boolean | undefined,
 ) {
   const conversation = useMemo(() => {
     if (typeof syncConversation === "function") {
@@ -57,7 +75,12 @@ export function useConversation<T extends Talk.UIBox>(
     }
     return syncConversation ?? conversationId;
   }, [session, syncConversation, conversationId]);
-  useSetter(box, conversation, "select");
+
+  const args = (
+    conversation !== undefined ? [conversation, { asGuest }] : []
+  ) as any;
+
+  useSpreadSetter(box, args, "select");
 }
 
 // subset of Session to help TypeScript pick the right overloads
