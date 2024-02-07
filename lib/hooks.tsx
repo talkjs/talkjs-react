@@ -48,13 +48,13 @@ export function useSpreadMethod<
   V extends any[],
   S extends string,
   T extends TalkObject & Record<S, (...args: V) => any>,
->(box: T | undefined, args: V | undefined, setter: S) {
+>(box: T | undefined, args: V | undefined, method: S) {
   args = usePreviousIfDeeplyEqual(args);
   useEffect(() => {
     if (args !== undefined && box?.isAlive) {
-      box[setter](...args);
+      box[method](...args);
     }
-  }, [setter, box, args]);
+  }, [method, box, args]);
 }
 
 /**
