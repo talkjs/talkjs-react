@@ -1,3 +1,7 @@
+## v0.1.6
+
+- Add `asGuest?: boolean` prop to `Chatbox`, `Inbox` and `Popup`
+
 ## v0.1.5
 
 - Output ES2015
