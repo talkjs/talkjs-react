@@ -11,7 +11,6 @@ type PopupProps = UIBoxProps<Talk.Popup> &
     highlightedWords?: Parameters<Talk.Popup["setHighlightedWords"]>[0];
     popupRef?: React.MutableRefObject<Talk.Popup | undefined>;
     show?: boolean;
-    showOnMount?: boolean;
   };
 
 export function Popup(props: PopupProps) {
@@ -31,7 +30,6 @@ function ActivePopup(props: PopupProps & { session: Talk.Session }) {
     syncConversation,
     asGuest,
     show,
-    showOnMount,
     popupRef,
     ...optionsAndEvents
   } = props;
@@ -45,7 +43,7 @@ function ActivePopup(props: PopupProps & { session: Talk.Session }) {
   useMethod(box, presence, "setPresence");
   useMethod(box, highlightedWords, "setHighlightedWords");
   useConversation(session, box, syncConversation, conversationId, asGuest);
-  const mounted = useMountBox(box, {show: show ?? showOnMount ?? true});
+  const mounted = useMountBox(box, {show: show ?? true});
 
   useEffect(() => {
     if(show === undefined || !mounted) {
