@@ -1,3 +1,7 @@
+## v0.1.8-beta.0
+
+- Add `show` prop to `Popup`, that allows you to specify whether the popup should be shown or hidden.
+
 ## v0.1.7-beta.0
 
 - Add `<HtmlPanel>` component
