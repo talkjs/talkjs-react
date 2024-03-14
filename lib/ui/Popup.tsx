@@ -4,11 +4,13 @@ import { getKeyForObject, splitObjectByPrefix } from "../util";
 import { useMethod, useConversation, useUIBox, useMountBox } from "../hooks";
 import { EventListeners } from "../EventListeners";
 import { UIBoxProps } from "../types";
+import { useEffect } from "react";
 
 type PopupProps = UIBoxProps<Talk.Popup> &
   Talk.PopupOptions & {
     highlightedWords?: Parameters<Talk.Popup["setHighlightedWords"]>[0];
     popupRef?: React.MutableRefObject<Talk.Popup | undefined>;
+    show?: boolean;
   };
 
 export function Popup(props: PopupProps) {
@@ -27,6 +29,7 @@ function ActivePopup(props: PopupProps & { session: Talk.Session }) {
     conversationId,
     syncConversation,
     asGuest,
+    show,
     popupRef,
     ...optionsAndEvents
   } = props;
@@ -40,7 +43,20 @@ function ActivePopup(props: PopupProps & { session: Talk.Session }) {
   useMethod(box, presence, "setPresence");
   useMethod(box, highlightedWords, "setHighlightedWords");
   useConversation(session, box, syncConversation, conversationId, asGuest);
-  useMountBox(box, undefined);
+  const mounted = useMountBox(box, {show: show ?? true});
+
+  useEffect(() => {
+    if(show === undefined || !mounted) {
+      return;
+    }
+
+    if(show) {
+      box?.show();
+    } else {
+      box?.hide();
+    }
+
+  }, [show, mounted, box])
 
   return <EventListeners target={box} handlers={events} />;
 }
