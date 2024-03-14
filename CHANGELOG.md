@@ -1,3 +1,7 @@
+## v0.1.7
+
+- Add `show` prop to `Popup`, that allows you to specify whether the popup should be shown or hidden.
+
 ## v0.1.6
 
 - Add `asGuest?: boolean` prop to `Chatbox`, `Inbox` and `Popup`
