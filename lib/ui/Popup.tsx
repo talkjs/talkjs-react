@@ -56,7 +56,7 @@ function ActivePopup(props: PopupProps & { session: Talk.Session }) {
       box?.hide();
     }
 
-  }, [show, mounted])
+  }, [show, mounted, box])
 
   return <EventListeners target={box} handlers={events} />;
 }
