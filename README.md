@@ -68,7 +68,7 @@ import { Session, Chatbox } from "@talkjs/react";
 function ChatComponent() {
   const syncUser = useCallback(
     () =>
-      new Talk.User({
+      return new Talk.User({
         id: "nina",
         name: "Nina",
         email: "nina@example.com",
