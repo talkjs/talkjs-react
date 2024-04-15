@@ -4,3 +4,4 @@ export { Chatbox } from "./ui/Chatbox";
 export { Inbox } from "./ui/Inbox";
 export { Popup } from "./ui/Popup";
 export { useSession, useUnreads } from "./SessionContext";
+export { HtmlPanel } from "./HtmlPanel";

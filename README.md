@@ -110,7 +110,7 @@ function ChatComponent() {
 export default ChatComponent;
 ```
 
-For more details and explanation, see our [getting started guide](/Getting_Started/Frameworks/React/).
+For more details and explanation, see our [getting started guide](https://talkjs.com/docs/Getting_Started/Frameworks/React/).
 
 ## Contributing
 
