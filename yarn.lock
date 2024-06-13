@@ -1479,10 +1479,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-talkjs@^0.16.3:
-  version "0.16.3"
-  resolved "https://registry.yarnpkg.com/talkjs/-/talkjs-0.16.3.tgz#90a811aea6d507b97a13c82d1ea42dcdd51ba9d7"
-  integrity sha512-8zwYJfdokAikZ0Rs/AXT28NPmnFQCnVWI4G7qXo8yTKg77bdNpv9EO0hin/SsSlOFleBDLAkBnnuaiFMEvyrNg==
+talkjs@^0.21.0:
+  version "0.21.0"
+  resolved "https://registry.yarnpkg.com/talkjs/-/talkjs-0.21.0.tgz#8dd2ee2c46b8f203c6264b7d96745421dd594f64"
+  integrity sha512-k1fAyYKLKbNVlchsUnaiLgKVF9J6eynalY5AvxhdKpa0wSssIBVsilcbgPoAkSMWFNNCnPHU75jUfP9tdFPlag==
 
 text-table@^0.2.0:
   version "0.2.0"
