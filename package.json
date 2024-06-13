@@ -28,7 +28,7 @@
     "url": "https://github.com/talkjs/talkjs-react/issues"
   },
   "homepage": "https://talkjs.com",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "type": "module",
   "files": [
     "dist"
