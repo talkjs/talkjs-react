@@ -15,6 +15,8 @@ type SessionProps = UserProps &
     sessionRef?: React.MutableRefObject<Talk.Session | undefined>;
     desktopNotificationEnabled?: boolean;
     children?: ReactNode;
+    token?: string;
+    tokenFetcher?: () => Promise<string>;
     signature?: string;
   };
 
@@ -26,6 +28,8 @@ export function Session(props: SessionProps) {
     userId,
     syncUser,
     appId,
+    token,
+    tokenFetcher,
     signature,
     sessionRef,
     desktopNotificationEnabled,
@@ -42,7 +46,7 @@ export function Session(props: SessionProps) {
           ? syncUser()
           : syncUser ?? new Talk.User(userId);
 
-      const session = new Talk.Session({ appId, me, signature });
+      const session = new Talk.Session({ appId, me, token, tokenFetcher, signature });
       setSession(session);
       if (sessionRef) {
         sessionRef.current = session;
@@ -52,7 +56,7 @@ export function Session(props: SessionProps) {
         // if appId or me changed, destroy (and then recreate) the entire
         // session.
         //
-        // once the JSSDK supports proper progammatic user mutation, we can
+        // once the JSSDK supports proper programmatic user mutation, we can
         // avoid recreating the session when `syncUser` changes.
         session.destroy();
         setSession(undefined);
