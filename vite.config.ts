@@ -36,6 +36,7 @@ export default defineConfig({
           react: "React",
           talkjs: "TalkJS",
         },
+        banner: `"use client";`,
       },
     },
   },
