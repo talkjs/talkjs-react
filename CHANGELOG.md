@@ -1,3 +1,7 @@
+## v0.1.9
+
+- Added `"use client"` banner to build outputs
+
 ## v0.1.8
 
 - Added `token` and `tokenFetcher` props to [Session](https://talkjs.com/docs/Reference/React_Native_SDK/Components/Session/). For more details on how to use JSON Web Token (JWT)-based authentication, see the [authentication documentation](https://talkjs.com/docs/Features/Security_Settings/Authentication/).
