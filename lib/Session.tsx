@@ -39,14 +39,21 @@ export function Session(props: SessionProps) {
     Talk.ready.then(() => markReady(true));
   }, []);
 
-  useEffect(() => {
-    if (ready) {
-      const me =
-        typeof syncUser === "function"
-          ? syncUser()
-          : syncUser ?? new Talk.User(userId);
+  const me = ready
+    ? typeof syncUser === "function"
+      ? syncUser()
+      : syncUser ?? new Talk.User(userId)
+    : null;
 
-      const session = new Talk.Session({ appId, me, token, tokenFetcher, signature });
+  useEffect(() => {
+    if (me) {
+      const session = new Talk.Session({
+        appId,
+        me,
+        token,
+        tokenFetcher,
+        signature,
+      });
       setSession(session);
       if (sessionRef) {
         sessionRef.current = session;
@@ -65,7 +72,12 @@ export function Session(props: SessionProps) {
         }
       };
     }
-  }, [ready, signature, appId, userId, syncUser, sessionRef]);
+    // We intentionally add `me?.id` to the dependency array here instead of
+    // just `me`, because `me` is an object so a shallow comparison will always
+    // return `false`.
+    //
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, signature, appId, userId, me?.id, sessionRef]);
 
   useMethod(
     session,
