@@ -77,7 +77,16 @@ export function Session(props: SessionProps) {
     // return `false`.
     //
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, signature, appId, userId, me?.id, sessionRef]);
+  }, [
+    ready,
+    signature,
+    appId,
+    userId,
+    me?.id,
+    token,
+    tokenFetcher,
+    sessionRef,
+  ]);
 
   useMethod(
     session,
