@@ -60,11 +60,6 @@ function App() {
     setConvId(convIds[nextConv]);
   }, [convId]);
 
-  const createUser = useCallback(() => {
-    console.log("createUser");
-    return new Talk.User(me);
-  }, [me]);
-
   const createConv = useCallback(
     (session: Talk.Session) => {
       console.log("createConv");
@@ -141,7 +136,7 @@ function App() {
     <>
       <Session
         appId={import.meta.env.VITE_APP_ID}
-        syncUser={createUser}
+        syncUser={() => new Talk.User(me)}
         onBrowserPermissionNeeded={onPerm}
         onUnreadsChange={onUnreads}
         sessionRef={sessionRef}
