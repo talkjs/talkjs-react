@@ -1,8 +1,15 @@
 import "./App.css";
 
-import { Session, Chatbox, useUnreads } from "../lib/main";
+import { Session, Chatbox, HtmlPanel, useUnreads } from "../lib/main";
 import Talk from "talkjs";
-import { ChangeEvent, useCallback, useMemo, useRef, useState, ReactElement } from "react";
+import {
+  ChangeEvent,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  ReactElement,
+} from "react";
 
 const convIds = ["talk-react-94872948u429843", "talk-react-194872948u429843"];
 const users = [
@@ -53,11 +60,6 @@ function App() {
     setConvId(convIds[nextConv]);
   }, [convId]);
 
-  const createUser = useCallback(() => {
-    console.log("createUser");
-    return new Talk.User(me);
-  }, [me]);
-
   const createConv = useCallback(
     (session: Talk.Session) => {
       console.log("createConv");
@@ -104,6 +106,11 @@ function App() {
     setDn(JSON.parse(event.target!.value));
   }, []);
 
+  const [panelHeight, setPanelHeight] = useState(100);
+  const [panelVisible, setPanelVisible] = useState(true);
+
+  const [renderPanel, setPanel] = useState(false);
+
   if (typeof import.meta.env.VITE_APP_ID !== "string") {
     return (
       <div style={{ maxWidth: "50em" }}>
@@ -129,7 +136,7 @@ function App() {
     <>
       <Session
         appId={import.meta.env.VITE_APP_ID}
-        syncUser={createUser}
+        syncUser={() => new Talk.User(me)}
         onBrowserPermissionNeeded={onPerm}
         onUnreadsChange={onUnreads}
         sessionRef={sessionRef}
@@ -150,9 +157,34 @@ function App() {
           loadingComponent={<span>LOADING....</span>}
           {...(blur ? { onBlur } : {})}
           style={{ width: 500, height: 600 }}
-        />
+        >
+          {renderPanel && (
+            <HtmlPanel
+              url="example/panel.html"
+              height={panelHeight}
+              show={panelVisible}
+            >
+              I am an HTML panel.
+              <button
+                onClick={() => setPanelHeight(panelHeight > 100 ? 100 : 150)}
+              >
+                Toggle panel height
+              </button>
+              <button onClick={() => setPanelVisible(false)}>Hide panel</button>
+            </HtmlPanel>
+          )}
+        </Chatbox>
         <UnreadsDisplay />
       </Session>
+
+      <button
+        onClick={() => {
+          setPanel((x) => !x);
+          setPanelVisible(true);
+        }}
+      >
+        {renderPanel ? "Unmount" : "Mount"} HTML panel
+      </button>
       <button onClick={otherMe}>switch user (new session)</button>
       <br />
       <button onClick={switchConv}>
@@ -203,19 +235,30 @@ function UnreadsDisplay() {
   if (unreads === undefined) {
     content = <p>unreads is undefined (no session)</p>;
   } else if (unreads.length === 0) {
-    content = <p>No unread messages</p>
+    content = <p>No unread messages</p>;
   } else {
-    content = <ul>
-      {unreads.map(u => {
-        return <li key={u.conversation.id}>{u.conversation.id} - {u.lastMessage.sender?.name || "system"}: {u.lastMessage.body}</li>
-      })}
-    </ul>
+    content = (
+      <ul>
+        {unreads.map((u) => {
+          return (
+            <li key={u.conversation.id}>
+              {u.conversation.id} - {u.lastMessage.sender?.name || "system"}:{" "}
+              {u.lastMessage.body}
+            </li>
+          );
+        })}
+      </ul>
+    );
   }
 
-  return <details>
-    <summary><strong>Unreads rendered with useUnreads</strong></summary>
-    {content}
-  </details>
+  return (
+    <details>
+      <summary>
+        <strong>Unreads rendered with useUnreads</strong>
+      </summary>
+      {content}
+    </details>
+  );
 }
 
 export default App;

@@ -1,3 +1,4 @@
+
 ## v0.1.9
 
 - Added `"use client"` banner to build outputs
@@ -11,9 +12,21 @@
 
 - Added `show` prop to `Popup`, that allows you to specify whether the popup should be shown or hidden.
 
+## v0.1.7-beta.0
+
+- Add `<HtmlPanel>` component
+
+**Note:** This component is currently experimental.
+
 ## v0.1.6
 
 - Added `asGuest?: boolean` prop to `Chatbox`, `Inbox` and `Popup`.
+
+## v0.1.6-beta.0
+
+- Add `<HtmlPanel>` component
+
+**Note:** This component is currently experimental.
 
 ## v0.1.5
 
