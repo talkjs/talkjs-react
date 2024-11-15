@@ -1,3 +1,7 @@
+## v0.1.10
+
+- Allow `null` as a value for the `conversationId` prop
+
 ## v0.1.9
 
 - Added `"use client"` banner to build outputs
