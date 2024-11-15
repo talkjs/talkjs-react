@@ -32,11 +32,11 @@ export type SessionEvents = Events<Talk.Session> & {
 
 export type ConversationProps =
   | {
-      conversationId: string;
-      syncConversation?: undefined;
+      conversationId: string | null | undefined;
+      syncConversation?: never;
     }
   | {
-      conversationId?: undefined;
+      conversationId?: never;
       syncConversation:
         | Talk.ConversationBuilder
         | ((session: Talk.Session) => Talk.ConversationBuilder);
