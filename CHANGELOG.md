@@ -1,3 +1,8 @@
+## v0.1.11
+
+- Externalize `react/jsx-runtime` dependency ([thanks to @KlotzJesse](https://github.com/talkjs/talkjs-react/pull/15))
+- Removed `react-dom` peer dependency
+
 ## v0.1.10
 
 - Allow `null` as a value for the `conversationId` prop
