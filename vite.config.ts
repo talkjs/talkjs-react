@@ -30,7 +30,7 @@ export default defineConfig({
       formats: ["es", "umd", "cjs"],
     },
     rollupOptions: {
-      external: ['react', 'react/jsx-runtime', 'react-dom', 'react-dom/client', 'talkjs'],
+      external: ["react", "react/jsx-runtime", "talkjs"],
       output: {
         globals: {
           react: "React",
