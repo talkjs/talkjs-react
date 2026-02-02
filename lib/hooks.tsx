@@ -77,7 +77,7 @@ export function useConversation<T extends Talk.UIBox>(
   }, [session, syncConversation, conversationId]);
 
   const args = (
-    conversation !== undefined ? [conversation, { asGuest }] : undefined
+    conversation !== undefined ? [conversation, { asGuest }] : [undefined]
   ) as any;
 
   useSpreadMethod(box, args, "select");
