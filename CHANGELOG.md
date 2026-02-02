@@ -1,3 +1,7 @@
+## v0.1.12
+
+- Fixed a bug where passing `undefined` as the `conversationId` to `<Inbox>` had no effect
+
 ## v0.1.11
 
 - Externalize `react/jsx-runtime` dependency ([thanks to @KlotzJesse](https://github.com/talkjs/talkjs-react/pull/15))
@@ -31,7 +35,6 @@
 ## v0.1.4
 
 - Added `useUnreads` hook.
-
 
 ## v0.1.3
 
